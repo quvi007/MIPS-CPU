@@ -1,0 +1,171 @@
+
+PC.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000d6  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  0000012a  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  0000012a  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000015c  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000020  00000000  00000000  00000198  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   000005fd  00000000  00000000  000001b8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000052f  00000000  00000000  000007b5  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000242  00000000  00000000  00000ce4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000024  00000000  00000000  00000f28  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000002fc  00000000  00000000  00000f4c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000000af  00000000  00000000  00001248  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000010  00000000  00000000  000012f7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 36 00 	call	0x6c	; 0x6c <main>
+  64:	0c 94 69 00 	jmp	0xd2	; 0xd2 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <main>:
+
+
+int main(void)
+{
+	// Input PC(8), Output PC(8), CLK(1) Pin, JMP Address(8), Branch Address(4), Zero, BranchFlag JMP(4)
+	DDRD = 0x00;
+  6c:	11 ba       	out	0x11, r1	; 17
+	DDRB = 0x00;
+  6e:	17 ba       	out	0x17, r1	; 23
+	DDRA = 0xFF;
+  70:	8f ef       	ldi	r24, 0xFF	; 255
+  72:	8a bb       	out	0x1a, r24	; 26
+	DDRC = 0x00;
+  74:	14 ba       	out	0x14, r1	; 20
+	
+	PORTA = 0;
+  76:	1b ba       	out	0x1b, r1	; 27
+	
+    /* Replace with your application code */
+	int prev_clock = 0;
+  78:	40 e0       	ldi	r20, 0x00	; 0
+  7a:	50 e0       	ldi	r21, 0x00	; 0
+    while (1) 
+    {
+		unsigned char pc_in = PINB;
+  7c:	e6 b3       	in	r30, 0x16	; 22
+		unsigned char jmp_address = PINC;
+  7e:	73 b3       	in	r23, 0x13	; 19
+		unsigned char branch_address = (PIND & 0x0F);
+  80:	80 b3       	in	r24, 0x10	; 16
+  82:	98 2f       	mov	r25, r24
+  84:	9f 70       	andi	r25, 0x0F	; 15
+		unsigned char clk = ((PIND >> 7) & 1);
+  86:	80 b3       	in	r24, 0x10	; 16
+  88:	88 1f       	adc	r24, r24
+  8a:	88 27       	eor	r24, r24
+  8c:	88 1f       	adc	r24, r24
+		unsigned char jmp = (PIND >> 6) & 1;
+  8e:	60 b3       	in	r22, 0x10	; 16
+		unsigned char branch = (PIND >> 5) & 1;
+  90:	20 b3       	in	r18, 0x10	; 16
+  92:	25 fb       	bst	r18, 5
+  94:	22 27       	eor	r18, r18
+  96:	20 f9       	bld	r18, 0
+		unsigned char branch_not = (PIND >> 4) & 1;
+  98:	30 b3       	in	r19, 0x10	; 16
+  9a:	32 95       	swap	r19
+  9c:	31 70       	andi	r19, 0x01	; 1
+		
+		unsigned char pc_out;
+		
+		if (jmp) {
+  9e:	66 fd       	sbrc	r22, 6
+  a0:	10 c0       	rjmp	.+32     	; 0xc2 <main+0x56>
+			pc_out = jmp_address;
+		}
+		else if (branch || branch_not) {
+  a2:	21 11       	cpse	r18, r1
+  a4:	02 c0       	rjmp	.+4      	; 0xaa <main+0x3e>
+  a6:	33 23       	and	r19, r19
+  a8:	51 f0       	breq	.+20     	; 0xbe <main+0x52>
+			if (branch_address > 7) {
+  aa:	98 30       	cpi	r25, 0x08	; 8
+  ac:	20 f0       	brcs	.+8      	; 0xb6 <main+0x4a>
+				pc_out = pc_in - (16 - branch_address) + 1;
+  ae:	9e 0f       	add	r25, r30
+  b0:	71 ef       	ldi	r23, 0xF1	; 241
+  b2:	79 0f       	add	r23, r25
+  b4:	06 c0       	rjmp	.+12     	; 0xc2 <main+0x56>
+			} else {
+				pc_out = pc_in + branch_address + 1;
+  b6:	9e 0f       	add	r25, r30
+  b8:	71 e0       	ldi	r23, 0x01	; 1
+  ba:	79 0f       	add	r23, r25
+  bc:	02 c0       	rjmp	.+4      	; 0xc2 <main+0x56>
+			}
+		}
+		else {
+			pc_out = pc_in + 1;
+  be:	71 e0       	ldi	r23, 0x01	; 1
+  c0:	7e 0f       	add	r23, r30
+		}
+		
+		if (prev_clock == 0 && clk == 1) {
+  c2:	45 2b       	or	r20, r21
+  c4:	19 f4       	brne	.+6      	; 0xcc <main+0x60>
+  c6:	81 30       	cpi	r24, 0x01	; 1
+  c8:	09 f4       	brne	.+2      	; 0xcc <main+0x60>
+			PORTA = pc_out;
+  ca:	7b bb       	out	0x1b, r23	; 27
+		}
+		prev_clock = clk;
+  cc:	48 2f       	mov	r20, r24
+  ce:	50 e0       	ldi	r21, 0x00	; 0
+    }
+  d0:	d5 cf       	rjmp	.-86     	; 0x7c <main+0x10>
+
+000000d2 <_exit>:
+  d2:	f8 94       	cli
+
+000000d4 <__stop_program>:
+  d4:	ff cf       	rjmp	.-2      	; 0xd4 <__stop_program>
